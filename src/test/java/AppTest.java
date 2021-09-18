@@ -53,7 +53,7 @@ class AppTest {
                                 "        \"weather_state_abbr\": \"hc\"," +
                                 "        \"wind_direction_compass\": \"SE\"," +
                                 "        \"created\": \"2021-09-17T15:59:02.346517Z\"," +
-                                "        \"applicable_date\": \"+tomorrow+\"," +
+                                "        \"applicable_date\":\"" + tomorrow + "\"," +
                                 "        \"min_temp\": 14.495000000000001," +
                                 "        \"max_temp\": 22.39," +
                                 "        \"the_temp\": 20.845," +
@@ -70,7 +70,7 @@ class AppTest {
                                 "        \"weather_state_abbr\": \"hc\"," +
                                 "        \"wind_direction_compass\": \"SE\"," +
                                 "        \"created\": \"2021-09-17T12:59:02.779531Z\"," +
-                                "        \"applicable_date\": \"+tomorrow+\"," +
+                                "        \"applicable_date\":\"" + tomorrow + "\"," +
                                 "        \"min_temp\": 14.535," +
                                 "        \"max_temp\": 22.5," +
                                 "        \"the_temp\": 20.799999999999997," +
@@ -101,16 +101,14 @@ class AppTest {
     public void testAppWithValidCity() throws Exception {
 
         // call the main method for weather app, with a city parameter
-        systemExitCode = catchSystemExit(() -> {
-            App.main(new String[]{"dubai"});
-        });
+        systemExitCode = catchSystemExit(() -> App.main(new String[]{"dubai"}));
 
         //check for exit code 0 which indicates no error
-        assertEquals(0, systemExitCode);
+        assertEquals(0, systemExitCode, "Check for success code for weather output display");
         //check for output contains 'Weather on' with tomorrow' date, indicates success response
         String tomoDateInRsp = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String expectedResponse = String.format("Weather on (%s)", tomoDateInRsp);
-        assertTrue(consoleText.toString().contains(expectedResponse));
+        assertTrue(consoleText.toString().contains(expectedResponse), "Check for output contains 'Weather on' with tomorrow's date");
     }
 
 
@@ -122,15 +120,13 @@ class AppTest {
     @Test
     public void testAppWithNoArg() throws Exception {
         // call to the main method for the weather app
-        systemExitCode = catchSystemExit(() -> {
-            App.main(new String[]{});
-        });
+        systemExitCode = catchSystemExit(() -> App.main(new String[]{}));
         //check for the system exit code 1, indicating error
-        assertEquals(1, systemExitCode);
+        assertEquals(1, systemExitCode, "Check for error code when city name is not passed");
 
         //check for the valid error message
         String expectedErrorResponse = String.format("%s", "Pass city name as an argument");
-        assertTrue(consoleText.toString().equals(expectedErrorResponse + NEWLINE));
+        assertEquals(consoleText.toString(), expectedErrorResponse + NEWLINE, "Check for the missing city name argument alert message");
     }
 
     @AfterAll
