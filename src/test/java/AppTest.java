@@ -1,3 +1,4 @@
+import static com.github.stefanbirkner.systemlambda.SystemLambda.assertNothingWrittenToSystemOut;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.catchSystemExit;
 
 import java.io.ByteArrayOutputStream;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 class AppTest {
     private static final String NEWLINE = System.getProperty("line.separator");
     private static ByteArrayOutputStream consoleText;
+    static PrintStream standardOutput;
     private static int systemExitCode = -1;
 
     static WireMockServer wireMockServer;
@@ -87,6 +89,7 @@ class AppTest {
     @BeforeAll
     static void setUp() {
         // Store output to verify the expected response from the command line
+        standardOutput = System.out;
         consoleText = new ByteArrayOutputStream();
         System.setOut(new PrintStream(consoleText));
     }
@@ -99,16 +102,19 @@ class AppTest {
      */
     @Test
     public void testAppWithValidCity() throws Exception {
-
+        standardOutput.println("=======Test with valid city parameter: 'Dubai'=======");
         // call the main method for weather app, with a city parameter
-        systemExitCode = catchSystemExit(() -> App.main(new String[]{"dubai"}));
+        systemExitCode = catchSystemExit(() -> App.main(new String[]{"Dubai"}));
 
         //check for exit code 0 which indicates no error
         assertEquals(0, systemExitCode, "Check for success code for weather output display");
         //check for output contains 'Weather on' with tomorrow' date, indicates success response
         String tomoDateInRsp = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String expectedResponse = String.format("Weather on (%s)", tomoDateInRsp);
-        assertTrue(consoleText.toString().contains(expectedResponse), "Check for output contains 'Weather on' with tomorrow's date");
+        String appOutput = consoleText.toString();
+        consoleText.reset();
+        standardOutput.println("Output from command line:" + NEWLINE + appOutput);
+        assertTrue(appOutput.contains(expectedResponse), "Check for output contains 'Weather on' with tomorrow's date");
     }
 
 
@@ -120,17 +126,23 @@ class AppTest {
     @Test
     public void testAppWithNoArg() throws Exception {
         // call to the main method for the weather app
+        standardOutput.println("=======Test with No Arguments=======");
         systemExitCode = catchSystemExit(() -> App.main(new String[]{}));
         //check for the system exit code 1, indicating error
         assertEquals(1, systemExitCode, "Check for error code when city name is not passed");
 
         //check for the valid error message
         String expectedErrorResponse = String.format("%s", "Pass city name as an argument");
-        assertEquals(consoleText.toString(), expectedErrorResponse + NEWLINE, "Check for the missing city name argument alert message");
+        String appOutput = consoleText.toString();
+        consoleText.reset();
+        standardOutput.println("Output from command line:" + NEWLINE + appOutput);
+        assertEquals(appOutput, expectedErrorResponse + NEWLINE, "Check for the missing city name argument alert message");
     }
 
     @AfterAll
     static void tearDown() {
+        System.setOut(standardOutput);
+        System.out.println("Tests completed");
         wireMockServer.stop();
     }
 
