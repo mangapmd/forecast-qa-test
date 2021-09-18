@@ -13,7 +13,9 @@ public class App {
             }
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://www.metaweather.com")
+//             updated baseUrl to localhost, to test against stubs instead
+//                    .baseUrl("https://www.metaweather.com")
+                    .baseUrl("http://localhost:8080")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             LocalDate tomorrow = LocalDate.now().plusDays(1);
