@@ -24,4 +24,5 @@ MP:
 1) Used WireMock to create stubs
 2) Updated the main method with endpoint to point to localhost to get response from the stub instead of the real service
 
-* Bonus task. Create CI pipeline with GitHub Actions or any alternative.
+* Bonus task. Create CI pipeline with GitHub Actions or any alternative.  
+Using GitHub Actions...
