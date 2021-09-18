@@ -132,7 +132,7 @@ class AppTest {
         assertEquals(1, systemExitCode, "Check for error code when city name is not passed");
 
         //check for the valid error message
-        String expectedErrorResponse = String.format("%s", "Pass city name as an argument test");
+        String expectedErrorResponse = String.format("%s", "Pass city name as an argument");
         String appOutput = consoleText.toString();
         consoleText.reset();
         standardOutput.println("Output from command line:" + NEWLINE + appOutput);
