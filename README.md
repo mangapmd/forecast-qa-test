@@ -13,12 +13,16 @@ Humidity: 61%
 ```
 
 ## Task - Updated with comments
-* How will you test the app? Write 1-2 automated tests to prove the correct work of application.
-MP: AppTest.java has 2 tests. 
+* How will you test the app? Write 1-2 automated tests to prove the correct work of application.  
+MP: AppTest.java has 2 tests.  
+First test, to verfiy the city name prompt message is displayed when no argument is sent.  
+Second test, to verify weather information displayed when city parameter is sent.  
+Tests Can be run as JUnit test within IDE, or via mvn test command
 
-* Ideally, tests should not touch the real service and work without the Internet.
+* Ideally, tests should not touch the real service and work without the Internet.  
 MP: 
 1) Used WireMock to create stubs
 2) Updated the main method with endpoint to point to localhost to get response from the stub instead of the real service
 
-* Bonus task. Create CI pipeline with GitHub Actions or any alternative.
+* Bonus task. Create CI pipeline with GitHub Actions or any alternative.  
+Using GitHub Actions...
